@@ -2,6 +2,8 @@
 
 **Aplicativo para Descoberta de Brechós**
 
+![Preview da aplicação](./assets_readme/pagina_inicial.png)
+
 ## Sobre o projeto
 
 A ReVeste é um aplicativo de moda circular que aproxima consumidores e brechós profissionais. A proposta nasce da percepção de que muitas lojas desse segmento divulgam suas peças de forma fragmentada, principalmente por redes sociais, mensagens e publicações temporárias, o que dificulta, para quem quer comprar roupas de segunda mão, encontrar estabelecimentos próximos, conhecer o estilo de cada loja e consultar as peças disponíveis antes de se deslocar.
