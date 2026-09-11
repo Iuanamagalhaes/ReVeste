@@ -44,3 +44,5 @@ Desenvolver uma aplicação multiplataforma em Flutter capaz de conectar consumi
 | Laís Krajner Lacerda | RM563182 |
 | Luana Magalhães Freire | RM565305 |
 | Pamella Souza da Silva Ferreira | RM566172 |
+
+Link do Figma: https://www.figma.com/design/j254jze0orFy3FMuPbmGqL/CheckPoint-04---CPAD?node-id=0-1&t=wyqk9D4hTnVJuCpF-1
