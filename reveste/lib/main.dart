@@ -1,18 +1,26 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'screens/home.dart';
-
-void main() {
+import 'firebase_options.dart'; // gerado pelo `flutterfire configure`
+import 'screens/boas_vindas_screen.dart';
+import 'theme/app_theme.dart';
+ 
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const ReVesteApp());
 }
-
+ 
 class ReVesteApp extends StatelessWidget {
   const ReVesteApp({super.key});
-
+ 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      title: 'ReVeste',
       debugShowCheckedModeBanner: false,
-      home: WelcomeScreen(),
+      theme: AppTheme.light,
+      home: const BoasVindasScreen(),
     );
   }
 }
+ 
