@@ -14,7 +14,7 @@ class Category {
       id: doc.id,
       nome: d['nome'] ?? '',
       icone: d['icone'] ?? '',
-      ordem: (d['ordem'] ?? 0) as int,
+      ordem: ((d['ordem'] ?? 0) as num).toInt(),
     );
   }
 }

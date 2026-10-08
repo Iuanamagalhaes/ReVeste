@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../services/auth_service.dart';
 import '../../widgets/auth_widgets.dart';
-import '../placeholder_home.dart';
+import '../home_router.dart';
+import 'verification_screen.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -37,11 +38,15 @@ class _LoginScreenState extends State<LoginScreen> {
       _erro = null;
     });
     try {
-      final u = await AuthService()
-          .entrar(_email.text.trim(), _senha.text, perfil: widget.perfil);
+      final auth = AuthService();
+      final u = await auth.entrar(_email.text.trim(), _senha.text, perfil: widget.perfil);
+      final ok = !AuthService.exigirVerificacao || await auth.emailVerificado();
       if (!mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => PlaceholderHome(usuario: u)),
+        MaterialPageRoute(
+          builder: (_) =>
+              ok ? destinoPosLogin(u) : VerificationScreen(usuario: u, emailJaEnviado: false),
+        ),
         (r) => false,
       );
     } catch (e) {

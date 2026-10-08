@@ -13,6 +13,7 @@ class Product {
   final String marca;
   final int precoCentavos; // 8990 = R$ 89,90
   final bool disponivel;
+  final bool vendido;
   final List<String> imagens;
 
   Product({
@@ -28,10 +29,18 @@ class Product {
     required this.marca,
     required this.precoCentavos,
     required this.disponivel,
+    this.vendido = false,
     required this.imagens,
   });
 
   String? get imagemCapa => imagens.isNotEmpty ? imagens.first : null;
+
+  /// Capa para copiar em pedidos/interesses: ignora fotos gravadas inline
+  /// (data-URL) para não estourar o limite de 1 MB do documento.
+  String? get imagemCapaLeve {
+    final c = imagemCapa;
+    return (c == null || c.startsWith('data:')) ? null : c;
+  }
 
   String get precoFormatado =>
       'R\$ ${(precoCentavos / 100).toStringAsFixed(2).replaceAll('.', ',')}';
@@ -49,8 +58,9 @@ class Product {
       condicao: d['condicao'] ?? '',
       cor: d['cor'] ?? '',
       marca: d['marca'] ?? '',
-      precoCentavos: (d['preco'] ?? 0) as int,
+      precoCentavos: ((d['preco'] ?? 0) as num).toInt(),
       disponivel: d['disponivel'] ?? true,
+      vendido: d['vendido'] ?? false,
       imagens: List<String>.from(d['imagens'] ?? const []),
     );
   }
@@ -69,6 +79,7 @@ class Product {
         'marca': marca,
         'preco': precoCentavos,
         'disponivel': disponivel,
+        'vendido': vendido,
         'imagens': imagens,
         'criado_em': FieldValue.serverTimestamp(),
         'atualizado_em': FieldValue.serverTimestamp(),
@@ -94,6 +105,31 @@ class ProductFilter {
     this.busca = '',
   });
 
+  bool get temFiltroAvancado =>
+      tamanhos.isNotEmpty ||
+      estilosDaLoja.isNotEmpty ||
+      precoMinCentavos != null ||
+      precoMaxCentavos != null;
+
+  ProductFilter copyWith({
+    Object? categoriaId = _manter,
+    Set<String>? tamanhos,
+    Set<String>? estilosDaLoja,
+    Object? precoMinCentavos = _manter,
+    Object? precoMaxCentavos = _manter,
+    String? busca,
+  }) =>
+      ProductFilter(
+        categoriaId: identical(categoriaId, _manter) ? this.categoriaId : categoriaId as String?,
+        tamanhos: tamanhos ?? this.tamanhos,
+        estilosDaLoja: estilosDaLoja ?? this.estilosDaLoja,
+        precoMinCentavos:
+            identical(precoMinCentavos, _manter) ? this.precoMinCentavos : precoMinCentavos as int?,
+        precoMaxCentavos:
+            identical(precoMaxCentavos, _manter) ? this.precoMaxCentavos : precoMaxCentavos as int?,
+        busca: busca ?? this.busca,
+      );
+
   bool matches(Product p, {Map<String, List<String>> estilosPorLoja = const {}}) {
     if (!p.disponivel) return false;
     if (categoriaId != null && p.categoriaId != categoriaId) return false;
@@ -112,3 +148,5 @@ class ProductFilter {
     return true;
   }
 }
+
+const Object _manter = Object();

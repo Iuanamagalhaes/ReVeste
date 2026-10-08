@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../models/app_user.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/auth_widgets.dart';
-import '../placeholder_home.dart';
+import '../home_router.dart';
 
 /// Região informada manualmente (usa_localizacao = false).
 /// A localização por GPS fica para o CP6.
@@ -49,10 +49,7 @@ class _LocationScreenState extends State<LocationScreen> {
         'usa_localizacao': false,
       });
       if (!mounted) return;
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => PlaceholderHome(usuario: widget.usuario)),
-        (r) => false,
-      );
+      irParaHome(context, widget.usuario);
     } catch (_) {
       if (mounted) setState(() => _erro = 'Não deu para salvar. Tente de novo.');
     } finally {

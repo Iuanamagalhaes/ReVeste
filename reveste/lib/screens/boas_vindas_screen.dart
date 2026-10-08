@@ -22,8 +22,16 @@ class BoasVindasScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // TODO: trocar pelo logo exportado do Figma (assets/logo.png)
-              const Icon(Icons.shopping_cart_outlined, size: 72, color: AppColors.verde),
+              Image.asset(
+                'assets/logo.png',
+                height: 96,
+                // Se o arquivo não for encontrado, mostra o ícone antigo em vez de quebrar a tela.
+                errorBuilder: (context, error, stackTrace) => const Icon(
+                  Icons.shopping_cart_outlined,
+                  size: 72,
+                  color: AppColors.verde,
+                ),
+              ),
               const SizedBox(height: 12),
               Text('ReVeste',
                   textAlign: TextAlign.center,

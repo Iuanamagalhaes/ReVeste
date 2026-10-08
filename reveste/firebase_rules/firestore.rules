@@ -1,0 +1,20 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Categorias: só leitura no app (cadastradas pelo console).
+    match /categories/{id} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // Demais coleções (users, stores, products, interests e subcoleções
+    // de favoritos, orders = pedidos, chats e chats/{id}/messages = conversas):
+    // qualquer usuário LOGADO lê e escreve.
+    // Obs.: regras por dono (uid == dono) quebrariam os usuários mockados do
+    // grupo, cujos ids (uid_marina_01...) não são o uid do Authentication.
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
