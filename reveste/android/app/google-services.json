@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1008629115750",
+    "project_id": "banco-dados-revest",
+    "storage_bucket": "banco-dados-revest.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008629115750:android:9e5daafbc1a6858bd1b6a7",
+        "android_client_info": {
+          "package_name": "com.example.reveste"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDA2DUBCcoUvOBFKj4yLObmQrhds_jFmNQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
