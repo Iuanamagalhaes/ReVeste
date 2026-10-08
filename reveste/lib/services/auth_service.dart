@@ -1,9 +1,13 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../models/app_user.dart';
 import 'firestore_service.dart';
 
 class AuthService {
+  /// false = login sem exigir e-mail confirmado (útil para contas de teste).
+  static const exigirVerificacao = true;
+
   final _auth = FirebaseAuth.instance;
   final _db = FirestoreService();
 
@@ -55,6 +59,7 @@ class AuthService {
       telefone: telefone.isEmpty ? null : telefone,
     );
     await _db.salvarUsuario(u);
+    await _enviarVerificacaoSilencioso();
 
     if (perfil == 'brecho') {
       final ref = FirebaseFirestore.instance.collection('stores').doc();
@@ -75,9 +80,39 @@ class AuthService {
     return u;
   }
 
+  bool get logado => _auth.currentUser != null;
+
+  Future<AppUser?> perfilAtual() async {
+    final u = _auth.currentUser;
+    if (u == null) return null;
+    return _buscarPerfil(u.uid, u.email ?? '');
+  }
+
+  /// Envia o e-mail com o link de confirmação (Firebase Auth).
+  Future<void> enviarVerificacao() async {
+    await _auth.currentUser?.sendEmailVerification();
+  }
+
+  Future<void> _enviarVerificacaoSilencioso() async {
+    try {
+      await enviarVerificacao();
+    } catch (_) {
+      // o usuário pode pedir o reenvio na tela de verificação
+    }
+  }
+
+  /// Recarrega o usuário no servidor e diz se o e-mail já foi confirmado.
+  Future<bool> emailVerificado() async {
+    await _auth.currentUser?.reload();
+    return _auth.currentUser?.emailVerified ?? false;
+  }
+
   Future<void> sair() => _auth.signOut();
 
   static String mensagemDeErro(Object e) {
+    if (e is TimeoutException) {
+      return 'A operação demorou demais. Confira a internet e tente de novo.';
+    }
     if (e is FirebaseException) {
       switch (e.code) {
         case 'invalid-credential':
@@ -92,6 +127,8 @@ class AuthService {
           return 'Esse e-mail não parece válido.';
         case 'network-request-failed':
           return 'Sem conexão. Confira a internet e tente de novo.';
+        case 'too-many-requests':
+          return 'Muitas tentativas seguidas. Aguarde um pouco e tente de novo.';
         case 'perfil-incorreto':
           return 'Essa conta é de outro tipo de perfil. Volte e escolha a opção certa.';
         case 'perfil-nao-encontrado':
