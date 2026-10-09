@@ -240,10 +240,6 @@ O arquivo será gerado em:
 build/app/outputs/flutter-apk/app-release.apk
 ```
 
-O APK deve ser instalado e testado em um dispositivo físico ou emulador antes da entrega.
-
-Após a validação, o grupo poderá publicá-lo na seção [Releases do GitHub](https://github.com/Iuanamagalhaes/ReVeste/releases), anexando o arquivo gerado.
-
 ## Aprendizados
 
 O desenvolvimento da ReVeste permitiu ao grupo trabalhar com planejamento de produto, identidade visual, navegação entre telas, organização de código e integração com serviços externos.
